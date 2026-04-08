@@ -1,5 +1,5 @@
 {
-  "name": "iobroker-shiftcalendar",
+  "name": "iobroker.shiftcalendar",
   "version": "1.1.0",
   "description": "ioBroker Schichtkalender Adapter – 21-Tage-Modell, Urlaub, benutzerdefinierte Muster",
   "author": "Christopher Magath <info@da-jimbo.de>",
