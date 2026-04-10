@@ -1,17 +1,17 @@
 {
   "common": {
     "name": "shiftcalendar",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "news": {
-      "1.1.0": {
-        "de": "21-Tage-Modell, Urlaubsverwaltung, exaktes Cron-Scheduling",
-        "en": "21-day model, vacation management, exact cron scheduling"
+      "1.2.0": {
+        "de": "Admin-Konfiguration korrigiert, instanceObjects korrekt gesetzt",
+        "en": "Fixed admin configuration, instanceObjects correctly set"
       }
     },
-    "title": "Schichtplan",
+    "title": "Schichtkalender",
     "titleLang": {
-      "de": "Schichtplan",
-      "en": "Shift Plan"
+      "de": "Schichtkalender",
+      "en": "Shift Calendar"
     },
     "desc": {
       "de": "Flexibler Schichtkalender mit 21-Tage-Modell, benutzerdefinierten Mustern und Urlaubsverwaltung",
@@ -42,5 +42,58 @@
     "customShiftDefs": [],
     "vacationEntries": []
   },
-  "objects": []
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "name": "Verbindungsstatus",
+        "type": "boolean",
+        "role": "indicator.connected",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    { "_id": "current",          "type": "channel", "common": { "name": "Aktuelle Schicht"      }, "native": {} },
+    { "_id": "current.shiftKey", "type": "state",   "common": { "name": "Kuerzel",  "type": "string",  "role": "text",             "read": true, "write": false, "def": ""    }, "native": {} },
+    { "_id": "current.shiftLabel","type": "state",  "common": { "name": "Name",     "type": "string",  "role": "text",             "read": true, "write": false, "def": ""    }, "native": {} },
+    { "_id": "current.shiftColor","type": "state",  "common": { "name": "Farbe",    "type": "string",  "role": "text",             "read": true, "write": false, "def": ""    }, "native": {} },
+    { "_id": "current.isFree",   "type": "state",   "common": { "name": "Frei",     "type": "boolean", "role": "indicator",        "read": true, "write": false, "def": false }, "native": {} },
+    { "_id": "current.isVacation","type": "state",  "common": { "name": "Urlaub",   "type": "boolean", "role": "indicator",        "read": true, "write": false, "def": false }, "native": {} },
+    { "_id": "current.shiftStart","type": "state",  "common": { "name": "Beginn",   "type": "string",  "role": "text",             "read": true, "write": false, "def": "-"   }, "native": {} },
+    { "_id": "current.shiftEnd", "type": "state",   "common": { "name": "Ende",     "type": "string",  "role": "text",             "read": true, "write": false, "def": "-"   }, "native": {} },
+    { "_id": "current.minutesUntilEnd","type":"state","common":{ "name": "Min bis Ende","type":"number","role":"value","unit":"min","read":true,"write":false,"def":0          }, "native": {} },
+    { "_id": "current.countdown","type": "state",   "common": { "name": "Countdown","type": "string",  "role": "text",             "read": true, "write": false, "def": "-"   }, "native": {} },
+    { "_id": "current.cycleDay", "type": "state",   "common": { "name": "Zyklustag","type": "number",  "role": "value",            "read": true, "write": false, "def": 0     }, "native": {} },
+
+    { "_id": "tomorrow",          "type": "channel", "common": { "name": "Morgen"                }, "native": {} },
+    { "_id": "tomorrow.shiftKey", "type": "state",   "common": { "name": "Kuerzel morgen",   "type": "string",  "role": "text",      "read": true, "write": false, "def": ""    }, "native": {} },
+    { "_id": "tomorrow.shiftLabel","type": "state",  "common": { "name": "Name morgen",      "type": "string",  "role": "text",      "read": true, "write": false, "def": ""    }, "native": {} },
+    { "_id": "tomorrow.shiftColor","type": "state",  "common": { "name": "Farbe morgen",     "type": "string",  "role": "text",      "read": true, "write": false, "def": ""    }, "native": {} },
+    { "_id": "tomorrow.isFree",   "type": "state",   "common": { "name": "Morgen frei",      "type": "boolean", "role": "indicator", "read": true, "write": false, "def": false }, "native": {} },
+    { "_id": "tomorrow.shiftStart","type": "state",  "common": { "name": "Beginn morgen",    "type": "string",  "role": "text",      "read": true, "write": false, "def": "-"   }, "native": {} },
+    { "_id": "tomorrow.shiftEnd", "type": "state",   "common": { "name": "Ende morgen",      "type": "string",  "role": "text",      "read": true, "write": false, "def": "-"   }, "native": {} },
+
+    { "_id": "dayAfterTomorrow",           "type": "channel", "common": { "name": "Uebermorgen"              }, "native": {} },
+    { "_id": "dayAfterTomorrow.shiftKey",  "type": "state",   "common": { "name": "Kuerzel uebermorgen", "type": "string",  "role": "text",      "read": true, "write": false, "def": ""    }, "native": {} },
+    { "_id": "dayAfterTomorrow.shiftLabel","type": "state",   "common": { "name": "Name uebermorgen",    "type": "string",  "role": "text",      "read": true, "write": false, "def": ""    }, "native": {} },
+    { "_id": "dayAfterTomorrow.isFree",    "type": "state",   "common": { "name": "Uebermorgen frei",   "type": "boolean", "role": "indicator", "read": true, "write": false, "def": false }, "native": {} },
+
+    { "_id": "next",           "type": "channel", "common": { "name": "Naechste Arbeitsschicht"        }, "native": {} },
+    { "_id": "next.shiftKey",  "type": "state",   "common": { "name": "Naechste Schicht Kuerzel",  "type": "string", "role": "text",  "read": true, "write": false, "def": ""  }, "native": {} },
+    { "_id": "next.shiftLabel","type": "state",   "common": { "name": "Naechste Schicht Name",     "type": "string", "role": "text",  "read": true, "write": false, "def": ""  }, "native": {} },
+    { "_id": "next.shiftStart","type": "state",   "common": { "name": "Naechste Schicht Beginn",   "type": "string", "role": "text",  "read": true, "write": false, "def": "-" }, "native": {} },
+    { "_id": "next.daysUntil", "type": "state",   "common": { "name": "Tage bis naechste Schicht", "type": "number", "role": "value", "read": true, "write": false, "def": 0, "unit": "days" }, "native": {} },
+
+    { "_id": "week",      "type": "channel", "common": { "name": "Wochenuebersicht"     }, "native": {} },
+    { "_id": "week.json", "type": "state",   "common": { "name": "7-Tage-JSON", "type": "string", "role": "json", "read": true, "write": false, "def": "[]" }, "native": {} },
+
+    { "_id": "meta",             "type": "channel", "common": { "name": "Meta"                        }, "native": {} },
+    { "_id": "meta.pattern",     "type": "state",   "common": { "name": "Aktives Muster",     "type": "string", "role": "text",  "read": true, "write": false, "def": ""  }, "native": {} },
+    { "_id": "meta.cycleLength", "type": "state",   "common": { "name": "Zykluslaenge Tage",  "type": "number", "role": "value", "read": true, "write": false, "def": 0   }, "native": {} },
+    { "_id": "meta.lastUpdate",  "type": "state",   "common": { "name": "Letztes Update ISO", "type": "string", "role": "text",  "read": true, "write": false, "def": ""  }, "native": {} }
+  ]
 }

@@ -2,7 +2,7 @@
   "type": "tabs",
   "items": {
     "tabGeneral": {
-      "type": "tab",
+      "type": "panel",
       "label": "Allgemein",
       "items": {
         "preset": {
@@ -20,45 +20,49 @@
           "default": "3schicht_21"
         },
         "referenceDate": {
+          "newLine": true,
           "type": "text",
-          "label": "Referenzdatum (Zyklus-Tag 1, Format: YYYY-MM-DD)",
+          "label": "Referenzdatum – erster Tag des Zyklus (YYYY-MM-DD)",
           "placeholder": "z.B. 2024-01-01",
+          "help": "Beim 21-Tage-Modell: erster Montag der Nachtschicht-Woche. Leer = heute.",
           "sm": 12
         }
       }
     },
     "tabCustom": {
-      "type": "tab",
+      "type": "panel",
       "label": "Benutzerdefiniert",
-      "hidden": "data.preset !== \"custom\"",
+      "hidden": "data.preset !== 'custom'",
       "items": {
         "customPattern": {
           "type": "text",
           "label": "Schichtmuster (z.B. FFSSNNXX)",
           "placeholder": "FFSSNNXX",
+          "help": "Jeder Buchstabe = 1 Tag. Wiederholt sich ab Referenzdatum endlos.",
           "sm": 12
         },
         "customShiftDefs": {
+          "newLine": true,
           "type": "table",
-          "label": "Schichttypen",
+          "label": "Schichttypen (einen Eintrag pro Kuerzel aus dem Muster)",
           "sm": 12,
           "items": {
-            "key":   { "type": "text",  "label": "Kuerzel",        "width": "80px",  "placeholder": "F"    },
-            "label": { "type": "text",  "label": "Bezeichnung",    "placeholder": "Fruehschicht"           },
-            "start": { "type": "text",  "label": "Beginn (HH:MM)", "width": "120px", "placeholder": "06:00"},
-            "end":   { "type": "text",  "label": "Ende (HH:MM)",   "width": "120px", "placeholder": "14:00"},
-            "color": { "type": "color", "label": "Farbe",          "width": "80px"                         }
+            "key":   { "type": "text",  "label": "Kuerzel",        "width": "80px",  "placeholder": "F"     },
+            "label": { "type": "text",  "label": "Bezeichnung",    "placeholder": "Fruehschicht"            },
+            "start": { "type": "text",  "label": "Beginn (HH:MM)", "width": "120px", "placeholder": "06:00" },
+            "end":   { "type": "text",  "label": "Ende (HH:MM)",   "width": "120px", "placeholder": "14:00" },
+            "color": { "type": "color", "label": "Farbe",          "width": "80px"                          }
           }
         }
       }
     },
     "tabVacation": {
-      "type": "tab",
+      "type": "panel",
       "label": "Urlaub",
       "items": {
         "vacationEntries": {
           "type": "table",
-          "label": "Urlaubseintraege",
+          "label": "Urlaubseintraege (Einzeltag ODER Von+Bis – nicht beides)",
           "sm": 12,
           "items": {
             "date": { "type": "text", "label": "Einzeltag (YYYY-MM-DD)", "placeholder": "2025-07-15" },
