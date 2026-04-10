@@ -1,0 +1,140 @@
+{
+  "type": "panel",
+  "items": {
+
+    "_tabs": {
+      "type": "tabs",
+      "items": {
+
+        "tabGeneral": {
+          "type": "tab",
+          "label": "Allgemein",
+          "items": {
+
+            "preset": {
+              "type": "select",
+              "label": "Schichtmodell",
+              "options": [
+                { "label": "3-Schicht 21-Tage (NNNNN-WE-SSSSS-WE-FFFFF-WE)", "value": "3schicht_21" },
+                { "label": "3-Schicht (FFSSNNXX)",                             "value": "3schicht"    },
+                { "label": "2-Schicht (FFSSXX)",                               "value": "2schicht"    },
+                { "label": "Kontinuierlicher Betrieb 4-Schicht (FSNX)",        "value": "4schicht"    },
+                { "label": "Wechselschicht (FNXX)",                            "value": "wechsel"     },
+                { "label": "Benutzerdefiniert",                                "value": "custom"      }
+              ],
+              "default": "3schicht_21",
+              "newLine": true,
+              "xs": 12,
+              "sm": 12,
+              "md": 6
+            },
+
+            "referenceDate": {
+              "type": "text",
+              "label": "Referenzdatum (Zyklus-Tag 1, Format: YYYY-MM-DD)",
+              "placeholder": "z.B. 2024-01-01",
+              "tooltip": "Erster Tag deines Schichtzyklus. Beim 21-Tage-Modell: der erste Montag der Nachtschicht-Woche. Leer lassen = heute.",
+              "newLine": true,
+              "xs": 12,
+              "sm": 12,
+              "md": 6
+            }
+
+          }
+        },
+
+        "tabCustom": {
+          "type": "tab",
+          "label": "Benutzerdefiniert",
+          "hidden": "data.preset !== 'custom'",
+          "items": {
+
+            "customPattern": {
+              "type": "text",
+              "label": "Schichtmuster (Buchstabenfolge, z.B. FFSSNNXX)",
+              "placeholder": "FFSSNNXX",
+              "tooltip": "Jeder Buchstabe steht fuer einen Tag. Der Zyklus wiederholt sich endlos ab dem Referenzdatum.",
+              "newLine": true,
+              "xs": 12,
+              "sm": 12
+            },
+
+            "customShiftDefs": {
+              "type": "table",
+              "label": "Schichttypen definieren (einen Eintrag pro Kuerzel)",
+              "newLine": true,
+              "xs": 12,
+              "sm": 12,
+              "items": {
+                "key": {
+                  "type": "text",
+                  "label": "Kuerzel",
+                  "width": "80px",
+                  "placeholder": "F"
+                },
+                "label": {
+                  "type": "text",
+                  "label": "Bezeichnung",
+                  "placeholder": "Fruehschicht"
+                },
+                "start": {
+                  "type": "text",
+                  "label": "Beginn (HH:MM)",
+                  "width": "120px",
+                  "placeholder": "06:00"
+                },
+                "end": {
+                  "type": "text",
+                  "label": "Ende (HH:MM)",
+                  "width": "120px",
+                  "placeholder": "14:00"
+                },
+                "color": {
+                  "type": "color",
+                  "label": "Farbe",
+                  "width": "80px"
+                }
+              }
+            }
+
+          }
+        },
+
+        "tabVacation": {
+          "type": "tab",
+          "label": "Urlaub",
+          "items": {
+
+            "vacationEntries": {
+              "type": "table",
+              "label": "Urlaubseintraege (Einzeltag ODER Von+Bis Zeitraum)",
+              "newLine": true,
+              "xs": 12,
+              "sm": 12,
+              "items": {
+                "date": {
+                  "type": "text",
+                  "label": "Einzeltag (YYYY-MM-DD)",
+                  "placeholder": "2025-07-15"
+                },
+                "from": {
+                  "type": "text",
+                  "label": "Von (YYYY-MM-DD)",
+                  "placeholder": "2025-08-01"
+                },
+                "to": {
+                  "type": "text",
+                  "label": "Bis (YYYY-MM-DD)",
+                  "placeholder": "2025-08-14"
+                }
+              }
+            }
+
+          }
+        }
+
+      }
+    }
+
+  }
+}
