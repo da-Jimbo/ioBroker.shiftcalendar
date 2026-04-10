@@ -1,0 +1,191 @@
+{
+  "type": "tabs",
+  "items": {
+
+    "tabGeneral": {
+      "type": "tab",
+      "label": "⚙️ Allgemein",
+      "items": {
+
+        "hdrModel": {
+          "type": "header",
+          "text": "Schichtmodell wählen"
+        },
+
+        "preset": {
+          "type": "select",
+          "label": "Schichtmodell",
+          "options": [
+            { "label": "3-Schicht 21-Tage (NNNNN-WE-SSSSS-WE-FFFFF-WE)", "value": "3schicht_21" },
+            { "label": "3-Schicht (FFSSNNXX)",                             "value": "3schicht"    },
+            { "label": "2-Schicht (FFSSXX)",                               "value": "2schicht"    },
+            { "label": "Kontinuierlicher Betrieb 4-Schicht (FSNX)",        "value": "4schicht"    },
+            { "label": "Wechselschicht (FNXX)",                            "value": "wechsel"     },
+            { "label": "✏️ Benutzerdefiniert",                             "value": "custom"      }
+          ],
+          "default": "3schicht_21",
+          "sm": 12
+        },
+
+        "hdrRef": {
+          "type": "header",
+          "text": "Referenzdatum"
+        },
+
+        "referenceDate": {
+          "type": "text",
+          "label": "Referenzdatum – erster Tag des Zyklus (Format: YYYY-MM-DD)",
+          "placeholder": "z.B. 2024-01-01",
+          "help": "Das Datum, an dem dein Schichtzyklus beginnt. Beim 21-Tage-Modell: der erste Montag der Nachtschichtwoche. Leer lassen = heutiges Datum.",
+          "sm": 12
+        },
+
+        "hdrInfo": {
+          "type": "header",
+          "text": "ℹ️ Modell-Übersicht"
+        },
+
+        "infoText": {
+          "type": "staticText",
+          "text": "3-Schicht 21-Tage: 5× Nacht → Wochenende → 5× Spät → Wochenende → 5× Früh → Wochenende. Samstag und Sonntag sind immer automatisch frei – unabhängig vom Zyklus.",
+          "sm": 12
+        }
+
+      }
+    },
+
+    "tabCustom": {
+      "type": "tab",
+      "label": "✏️ Benutzerdefiniert",
+      "hidden": "data.preset !== 'custom'",
+      "items": {
+
+        "hdrPattern": {
+          "type": "header",
+          "text": "Schichtmuster"
+        },
+
+        "customPattern": {
+          "type": "text",
+          "label": "Muster (Buchstabenfolge)",
+          "placeholder": "z.B. FFSSNNXX",
+          "help": "Jeder Buchstabe steht für einen Tag. Der Zyklus wiederholt sich endlos ab dem Referenzdatum. Groß-/Kleinschreibung egal.",
+          "sm": 12
+        },
+
+        "hdrDefs": {
+          "type": "header",
+          "text": "Schichttypen definieren"
+        },
+
+        "customShiftDefsHint": {
+          "type": "staticText",
+          "text": "Definiere hier jeden Buchstaben aus deinem Muster. Für Frei- oder Ruhetage die Zeitfelder leer lassen.",
+          "sm": 12
+        },
+
+        "customShiftDefs": {
+          "type": "table",
+          "label": "Schichttypen",
+          "showSecondAddAt": 0,
+          "items": {
+            "key": {
+              "type": "text",
+              "label": "Kürzel",
+              "width": "70px",
+              "placeholder": "F"
+            },
+            "label": {
+              "type": "text",
+              "label": "Bezeichnung",
+              "placeholder": "Frühschicht"
+            },
+            "start": {
+              "type": "text",
+              "label": "Beginn (HH:MM)",
+              "width": "110px",
+              "placeholder": "06:00"
+            },
+            "end": {
+              "type": "text",
+              "label": "Ende (HH:MM)",
+              "width": "110px",
+              "placeholder": "14:00"
+            },
+            "color": {
+              "type": "color",
+              "label": "Farbe",
+              "width": "80px"
+            }
+          },
+          "sm": 12
+        }
+
+      }
+    },
+
+    "tabVacation": {
+      "type": "tab",
+      "label": "🏖️ Urlaub",
+      "items": {
+
+        "hdrVacation": {
+          "type": "header",
+          "text": "Urlaubstage verwalten"
+        },
+
+        "vacationHint": {
+          "type": "staticText",
+          "text": "Trage hier einzelne Urlaubstage oder Zeiträume ein. Du kannst beides kombinieren. Der Adapter lädt die Liste beim Start automatisch. Nach Änderungen den Adapter neu starten.",
+          "sm": 12
+        },
+
+        "vacationEntries": {
+          "type": "table",
+          "label": "Urlaubseinträge",
+          "showSecondAddAt": 0,
+          "items": {
+            "date": {
+              "type": "text",
+              "label": "Einzeltag (YYYY-MM-DD)",
+              "placeholder": "2025-07-15",
+              "help": "Nur ausfüllen für einen einzelnen Tag. Bei Zeitraum stattdessen Von + Bis nutzen."
+            },
+            "from": {
+              "type": "text",
+              "label": "Von (YYYY-MM-DD)",
+              "placeholder": "2025-08-01"
+            },
+            "to": {
+              "type": "text",
+              "label": "Bis (YYYY-MM-DD)",
+              "placeholder": "2025-08-14"
+            }
+          },
+          "sm": 12
+        }
+
+      }
+    },
+
+    "tabInfo": {
+      "type": "tab",
+      "label": "📋 Datenpunkte",
+      "items": {
+
+        "hdrDp": {
+          "type": "header",
+          "text": "Erzeugte Datenpunkte (schichtplan.0.*)"
+        },
+
+        "dpText": {
+          "type": "staticText",
+          "text": "current.shiftKey – Aktuelles Schichtkürzel (F / S / N / W)\ncurrent.shiftLabel – Schichtname (z.B. Frühschicht)\ncurrent.shiftColor – Farbe als Hex-Wert\ncurrent.isFree – true wenn heute frei oder Wochenende\ncurrent.isVacation – true wenn heute Urlaubstag\ncurrent.shiftStart – Schichtbeginn (HH:MM)\ncurrent.shiftEnd – Schichtende (HH:MM)\ncurrent.minutesUntilEnd – Minuten bis Schichtende\ncurrent.countdown – Countdown als Text (z.B. 3h 12m)\ncurrent.cycleDay – Position im Zyklus (1-basiert)\n\ntomorrow.shiftKey / .shiftLabel / .shiftColor / .isFree / .shiftStart / .shiftEnd\ndayAfterTomorrow.shiftKey / .shiftLabel / .isFree\n\nnext.shiftKey – Nächste Arbeitsschicht (überspringt Frei + Urlaub)\nnext.shiftLabel / .shiftStart / .daysUntil\n\nweek.json – 7-Tage-Übersicht als JSON-Array\n\nmeta.pattern – Aktives Muster\nmeta.cycleLength – Zykluslänge in Tagen\nmeta.lastUpdate – Zeitstempel letzter Update",
+          "sm": 12
+        }
+
+      }
+    }
+
+  }
+}

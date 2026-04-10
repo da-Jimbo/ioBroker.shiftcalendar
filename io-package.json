@@ -1,0 +1,265 @@
+{
+  "common": {
+    "name": "schichtplan",
+    "version": "1.1.0",
+    "news": {
+      "1.1.0": {
+        "de": "21-Tage-Modell, Urlaubsverwaltung im Admin, exaktes Cron-Scheduling",
+        "en": "21-day model, vacation management in admin, exact cron scheduling"
+      },
+      "1.0.0": {
+        "de": "Erstveröffentlichung",
+        "en": "Initial release"
+      }
+    },
+    "title": "Schichtplan",
+    "titleLang": {
+      "de": "Schichtplan",
+      "en": "Shift Plan"
+    },
+    "desc": {
+      "de": "Flexibler Schichtkalender: 21-Tage-Modell, benutzerdefinierte Muster, Urlaubsverwaltung, Countdown, Wochenübersicht",
+      "en": "Flexible shift calendar: 21-day model, custom patterns, vacation management, countdown, weekly overview"
+    },
+    "authors": [
+      "Dein Name <deine@email.de>"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "readme": "README.md",
+    "icon": "admin/schichtplan.png",
+    "extIcon": "admin/schichtplan.png",
+    "type": "general",
+    "loglevel": "info",
+    "connectionType": "local",
+    "dataSource": "none",
+    "keywords": ["schicht", "kalender", "schichtplan", "urlaub", "arbeitszeit", "nachtschicht"]
+  },
+  "native": {
+    "preset": "3schicht_21",
+    "referenceDate": "",
+    "customPattern": "",
+    "customShiftDefs": [],
+    "vacationEntries": []
+  },
+  "objects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": { "name": "Adapterinformationen" },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "name": "Verbindungsstatus",
+        "type": "boolean",
+        "role": "indicator.connected",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "current",
+      "type": "channel",
+      "common": { "name": "Aktuelle Schicht" },
+      "native": {}
+    },
+    {
+      "_id": "current.shiftKey",
+      "type": "state",
+      "common": { "name": "Aktuelle Schicht (Kürzel)", "type": "string", "role": "text", "read": true, "write": false, "def": "" },
+      "native": {}
+    },
+    {
+      "_id": "current.shiftLabel",
+      "type": "state",
+      "common": { "name": "Aktuelle Schicht (Name)", "type": "string", "role": "text", "read": true, "write": false, "def": "" },
+      "native": {}
+    },
+    {
+      "_id": "current.shiftColor",
+      "type": "state",
+      "common": { "name": "Schichtfarbe (Hex)", "type": "string", "role": "text", "read": true, "write": false, "def": "" },
+      "native": {}
+    },
+    {
+      "_id": "current.isFree",
+      "type": "state",
+      "common": { "name": "Heute frei", "type": "boolean", "role": "indicator", "read": true, "write": false, "def": false },
+      "native": {}
+    },
+    {
+      "_id": "current.isVacation",
+      "type": "state",
+      "common": { "name": "Heute Urlaub", "type": "boolean", "role": "indicator", "read": true, "write": false, "def": false },
+      "native": {}
+    },
+    {
+      "_id": "current.shiftStart",
+      "type": "state",
+      "common": { "name": "Schichtbeginn (HH:MM)", "type": "string", "role": "text", "read": true, "write": false, "def": "-" },
+      "native": {}
+    },
+    {
+      "_id": "current.shiftEnd",
+      "type": "state",
+      "common": { "name": "Schichtende (HH:MM)", "type": "string", "role": "text", "read": true, "write": false, "def": "-" },
+      "native": {}
+    },
+    {
+      "_id": "current.minutesUntilEnd",
+      "type": "state",
+      "common": { "name": "Minuten bis Schichtende", "type": "number", "role": "value", "unit": "min", "read": true, "write": false, "def": 0 },
+      "native": {}
+    },
+    {
+      "_id": "current.countdown",
+      "type": "state",
+      "common": { "name": "Countdown bis Schichtende", "type": "string", "role": "text", "read": true, "write": false, "def": "-" },
+      "native": {}
+    },
+    {
+      "_id": "current.cycleDay",
+      "type": "state",
+      "common": { "name": "Zyklustag (1-basiert)", "type": "number", "role": "value", "read": true, "write": false, "def": 0 },
+      "native": {}
+    },
+    {
+      "_id": "tomorrow",
+      "type": "channel",
+      "common": { "name": "Schicht morgen" },
+      "native": {}
+    },
+    {
+      "_id": "tomorrow.shiftKey",
+      "type": "state",
+      "common": { "name": "Schicht morgen (Kürzel)", "type": "string", "role": "text", "read": true, "write": false, "def": "" },
+      "native": {}
+    },
+    {
+      "_id": "tomorrow.shiftLabel",
+      "type": "state",
+      "common": { "name": "Schicht morgen (Name)", "type": "string", "role": "text", "read": true, "write": false, "def": "" },
+      "native": {}
+    },
+    {
+      "_id": "tomorrow.shiftColor",
+      "type": "state",
+      "common": { "name": "Schichtfarbe morgen (Hex)", "type": "string", "role": "text", "read": true, "write": false, "def": "" },
+      "native": {}
+    },
+    {
+      "_id": "tomorrow.isFree",
+      "type": "state",
+      "common": { "name": "Morgen frei", "type": "boolean", "role": "indicator", "read": true, "write": false, "def": false },
+      "native": {}
+    },
+    {
+      "_id": "tomorrow.shiftStart",
+      "type": "state",
+      "common": { "name": "Schichtbeginn morgen (HH:MM)", "type": "string", "role": "text", "read": true, "write": false, "def": "-" },
+      "native": {}
+    },
+    {
+      "_id": "tomorrow.shiftEnd",
+      "type": "state",
+      "common": { "name": "Schichtende morgen (HH:MM)", "type": "string", "role": "text", "read": true, "write": false, "def": "-" },
+      "native": {}
+    },
+    {
+      "_id": "dayAfterTomorrow",
+      "type": "channel",
+      "common": { "name": "Schicht übermorgen" },
+      "native": {}
+    },
+    {
+      "_id": "dayAfterTomorrow.shiftKey",
+      "type": "state",
+      "common": { "name": "Übermorgen (Kürzel)", "type": "string", "role": "text", "read": true, "write": false, "def": "" },
+      "native": {}
+    },
+    {
+      "_id": "dayAfterTomorrow.shiftLabel",
+      "type": "state",
+      "common": { "name": "Übermorgen (Name)", "type": "string", "role": "text", "read": true, "write": false, "def": "" },
+      "native": {}
+    },
+    {
+      "_id": "dayAfterTomorrow.isFree",
+      "type": "state",
+      "common": { "name": "Übermorgen frei", "type": "boolean", "role": "indicator", "read": true, "write": false, "def": false },
+      "native": {}
+    },
+    {
+      "_id": "next",
+      "type": "channel",
+      "common": { "name": "Nächste Arbeitsschicht" },
+      "native": {}
+    },
+    {
+      "_id": "next.shiftKey",
+      "type": "state",
+      "common": { "name": "Nächste Schicht (Kürzel)", "type": "string", "role": "text", "read": true, "write": false, "def": "" },
+      "native": {}
+    },
+    {
+      "_id": "next.shiftLabel",
+      "type": "state",
+      "common": { "name": "Nächste Schicht (Name)", "type": "string", "role": "text", "read": true, "write": false, "def": "" },
+      "native": {}
+    },
+    {
+      "_id": "next.shiftStart",
+      "type": "state",
+      "common": { "name": "Nächste Schicht Beginn (HH:MM)", "type": "string", "role": "text", "read": true, "write": false, "def": "-" },
+      "native": {}
+    },
+    {
+      "_id": "next.daysUntil",
+      "type": "state",
+      "common": { "name": "Tage bis nächste Schicht", "type": "number", "role": "value", "unit": "days", "read": true, "write": false, "def": 0 },
+      "native": {}
+    },
+    {
+      "_id": "week",
+      "type": "channel",
+      "common": { "name": "Wochenübersicht" },
+      "native": {}
+    },
+    {
+      "_id": "week.json",
+      "type": "state",
+      "common": { "name": "7-Tage-Übersicht (JSON)", "type": "string", "role": "json", "read": true, "write": false, "def": "[]" },
+      "native": {}
+    },
+    {
+      "_id": "meta",
+      "type": "channel",
+      "common": { "name": "Metainformationen" },
+      "native": {}
+    },
+    {
+      "_id": "meta.pattern",
+      "type": "state",
+      "common": { "name": "Aktives Schichtmuster", "type": "string", "role": "text", "read": true, "write": false, "def": "" },
+      "native": {}
+    },
+    {
+      "_id": "meta.cycleLength",
+      "type": "state",
+      "common": { "name": "Zykluslänge (Tage)", "type": "number", "role": "value", "read": true, "write": false, "def": 0 },
+      "native": {}
+    },
+    {
+      "_id": "meta.lastUpdate",
+      "type": "state",
+      "common": { "name": "Letztes Update (ISO)", "type": "string", "role": "text", "read": true, "write": false, "def": "" },
+      "native": {}
+    }
+  ]
+}
