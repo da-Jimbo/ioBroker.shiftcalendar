@@ -2,7 +2,7 @@
   "name": "iobroker.shiftcalendar",
   "version": "1.0.0",
   "description": "Shift calendar adapter for ioBroker",
-  "author": "Your Name <your@email.com>",
+  "author": "da-Jimbo <Info@da-jimbo.de>",
   "homepage": "https://github.com/da-Jimbo/iobroker.shiftcalendar",
   "license": "MIT",
   "main": "main.js",
