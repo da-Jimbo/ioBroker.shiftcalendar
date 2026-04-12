@@ -1,22 +1,27 @@
 {
   "name": "iobroker.shiftcalendar",
-  "version": "1.1.0",
-  "description": "ioBroker Schichtplan Adapter – 21-Tage-Modell, Urlaub, benutzerdefinierte Muster",
-  "author": "Dein Name <deine@email.de>",
+  "version": "1.0.0",
+  "description": "Shift calendar adapter for ioBroker",
+  "author": "Your Name <your@email.com>",
+  "homepage": "https://github.com/da-Jimbo/iobroker.shiftcalendar",
   "license": "MIT",
   "main": "main.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "lint": "eslint main.js",
-    "test": "echo \"Keine Tests vorhanden\" && exit 0"
+    "test": "echo no tests"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.0.0"
+    "@iobroker/adapter-core": "^3.2.3"
   },
-  "devDependencies": {
-    "eslint": "^8.0.0",
-    "@iobroker/eslint-config": "^1.0.0"
-  },
-  "engines": {
-    "node": ">=18.0.0"
+  "keywords": [
+    "ioBroker",
+    "shiftcalendar",
+    "schichtplan"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/da-Jimbo/iobroker.shiftcalendar"
   }
 }
