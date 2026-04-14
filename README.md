@@ -1,6 +1,6 @@
 # ioBroker Schichtplan Adapter
 
-Flexibler Schichtkalender-Adapter für ioBroker mit Unterstützung für das 21-Tage-Schichtmodell, frei konfigurierbaren Mustern und Urlaubsverwaltung.
+Flexibler Schichtkalender-Adapter für ioBroker mit Unterstützung für diverse Schichtmodelle, frei konfigurierbaren Mustern und Urlaubsverwaltung.
 
 ---
 
