@@ -19,20 +19,12 @@ function parseTime(str) {
     return { h, m };
 }
 
-/**
- * Gibt das Schicht-Kürzel für ein Datum zurück.
- * Das Muster wiederholt sich zyklisch ab referenceDate.
- */
 function getShiftKey(date, pattern, referenceDate) {
     const diff = Math.round((dateMidnight(date) - dateMidnight(referenceDate)) / MS_PER_DAY);
     const len  = pattern.length;
     return pattern[((diff % len) + len) % len].toUpperCase();
 }
 
-/**
- * Minuten bis zum Ende der aktuellen Schicht.
- * Überquert Mitternacht korrekt (z.B. Nachtschicht endet 06:00).
- */
 function minutesUntilEnd(endTimeStr, now) {
     const t = parseTime(endTimeStr);
     if (!t) return null;
@@ -50,10 +42,6 @@ function formatMinutes(mins) {
     return h > 0 ? `${h}h ${m}m` : `${m}m`;
 }
 
-/**
- * Urlaubsmenge aus Konfig aufbauen.
- * Einträge: { date: 'YYYY-MM-DD' } oder { from: '...', to: '...' }
- */
 function buildVacationSet(entries) {
     const set = new Set();
     if (!Array.isArray(entries)) return set;
@@ -76,21 +64,12 @@ function isVacationDay(date, vacSet) {
     return vacSet.has(dateMidnight(date).toISOString().slice(0, 10));
 }
 
-/**
- * Nächster Update-Zeitpunkt:
- * Feuert exakt zu Schichtbeginn/-ende und zu Mitternacht.
- * Minimum 30s, Maximum 15min.
- */
 function nextTriggerMs(shiftDefs, now) {
     const candidates = [];
-
-    // Mitternacht
     const midnight = dateMidnight(now);
     midnight.setDate(midnight.getDate() + 1);
     midnight.setSeconds(5);
     candidates.push(midnight.getTime());
-
-    // Schichtgrenzen heute + morgen
     for (let offset = 0; offset <= 1; offset++) {
         const base = new Date(now);
         base.setDate(now.getDate() + offset);
@@ -105,7 +84,6 @@ function nextTriggerMs(shiftDefs, now) {
             }
         }
     }
-
     const next = Math.min(...candidates);
     const ms   = next - now.getTime();
     return Math.max(30_000, Math.min(ms, 15 * 60_000));
@@ -129,7 +107,14 @@ class ShiftCalendar extends utils.Adapter {
     async onReady() {
         this.log.info('ShiftCalendar gestartet');
 
-        if (!this._loadConfig()) return;
+        // Subscription hält den Prozess am Leben, auch ohne Config
+        await this.subscribeStatesAsync('info.connection');
+
+        if (!this._loadConfig()) {
+            this.log.warn('Kein Schichtmuster konfiguriert. Bitte im Admin unter "Schichten" eintragen und Adapter neu starten.');
+            await this.setStateAsync('info.connection', false, true);
+            return; // Prozess bleibt am Leben wegen Subscription
+        }
 
         await this._updateAllStates();
         await this.setStateAsync('info.connection', true, true);
@@ -146,14 +131,12 @@ class ShiftCalendar extends utils.Adapter {
     _loadConfig() {
         const cfg = this.config;
 
-        // Muster
         const pattern = (cfg.pattern || '').toUpperCase().replace(/\s/g, '');
         if (!pattern) {
-            this.log.error('Kein Schichtmuster konfiguriert! Bitte im Admin unter "Schichten → Muster" eintragen.');
+            this.log.error('Kein Schichtmuster konfiguriert!');
             return false;
         }
 
-        // Schichtdefinitionen
         const shiftDefs = {};
         for (const row of (cfg.shiftDefs || [])) {
             const key = (row.key || '').toUpperCase().trim();
@@ -166,15 +149,13 @@ class ShiftCalendar extends utils.Adapter {
             };
         }
 
-        // Prüfe ob alle Pattern-Zeichen definiert sind
         for (const ch of pattern) {
             if (!shiftDefs[ch]) {
-                this.log.warn(`Kürzel "${ch}" im Muster ist nicht in den Schichttypen definiert – wird als Freitag behandelt.`);
+                this.log.warn(`Kürzel "${ch}" nicht definiert – wird als Freitag behandelt.`);
                 shiftDefs[ch] = { label: ch, start: null, end: null, color: '#6b7280' };
             }
         }
 
-        // Referenzdatum
         const refDate = (cfg.referenceDate || '').trim() || new Date().toISOString().slice(0, 10);
 
         this._pattern     = pattern;
@@ -182,7 +163,7 @@ class ShiftCalendar extends utils.Adapter {
         this._refDate     = refDate;
         this._vacationSet = buildVacationSet(cfg.vacationEntries || []);
 
-        this.log.info(`Muster: ${pattern} (${pattern.length} Tage), Referenz: ${refDate}, Urlaube: ${this._vacationSet.size} Tage`);
+        this.log.info(`Muster: ${pattern} (${pattern.length} Tage), Referenz: ${refDate}, Urlaube: ${this._vacationSet.size}`);
         return true;
     }
 
@@ -191,7 +172,6 @@ class ShiftCalendar extends utils.Adapter {
     async _updateAllStates() {
         const now = new Date();
 
-        // Schichtinfo für ein Datum ermitteln
         const infoFor = (date, checkVacation = false) => {
             const key   = getShiftKey(date, this._pattern, this._refDate);
             const def   = this._shiftDefs[key] || { label: key, start: null, end: null, color: '#6b7280' };
@@ -215,23 +195,19 @@ class ShiftCalendar extends utils.Adapter {
         const tom = infoFor(d1);
         const dat = infoFor(d2);
 
-        // Zyklustag (1-basiert)
         const diffDays = Math.round((dateMidnight(d0) - dateMidnight(this._refDate)) / MS_PER_DAY);
         const cycleDay = ((diffDays % this._pattern.length) + this._pattern.length) % this._pattern.length + 1;
 
-        // Countdown
         const minsEnd   = cur.isFree ? null : minutesUntilEnd(cur.end, now);
         const countdown = cur.isVacation ? 'Urlaub' : cur.isFree ? 'Frei' : formatMinutes(minsEnd);
 
-        // Nächste Arbeitsschicht
         let nextInfo = null, daysUntil = 0;
         for (let i = 1; i <= 60; i++) {
-            const d = new Date(now); d.setDate(now.getDate() + i);
+            const d    = new Date(now); d.setDate(now.getDate() + i);
             const info = infoFor(d);
             if (!info.isFree) { nextInfo = info; daysUntil = i; break; }
         }
 
-        // 7-Tage-Übersicht
         const week = [];
         for (let i = 0; i < 7; i++) {
             const d    = new Date(now); d.setDate(now.getDate() + i);
@@ -248,7 +224,6 @@ class ShiftCalendar extends utils.Adapter {
             });
         }
 
-        // States schreiben
         const states = [
             ['current.shiftKey',           cur.key],
             ['current.shiftLabel',         cur.label],
@@ -269,9 +244,9 @@ class ShiftCalendar extends utils.Adapter {
             ['dayAfterTomorrow.shiftKey',   dat.key],
             ['dayAfterTomorrow.shiftLabel', dat.label],
             ['dayAfterTomorrow.isFree',     dat.isFree],
-            ['next.shiftKey',              nextInfo?.key            || '-'],
-            ['next.shiftLabel',            nextInfo?.label          || '-'],
-            ['next.shiftStart',            nextInfo?.start          || '-'],
+            ['next.shiftKey',              nextInfo?.key   || '-'],
+            ['next.shiftLabel',            nextInfo?.label || '-'],
+            ['next.shiftStart',            nextInfo?.start || '-'],
             ['next.daysUntil',             daysUntil],
             ['week.json',                  JSON.stringify(week)],
             ['meta.pattern',               this._pattern],
