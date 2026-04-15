@@ -4,7 +4,7 @@
 
 Ein **hochflexibler Schichtkalender-Adapter für ioBroker**, der nahezu jedes Schichtsystem abbilden kann – von einfachen 2-Schicht-Modellen bis hin zu komplexen, individuell definierten Rotationen.
 
-Der Adapter basiert auf einem frei definierbaren **Pattern-System mit Wiederholung**, wodurch keine festen Zykluslängen (z. B. 21 Tage) mehr notwendig sind.
+Der Adapter basiert auf einem frei definierbaren **Pattern-System mit Wiederholung**, wodurch keine festen Zykluslängen notwendig sind.
 
 ---
 
