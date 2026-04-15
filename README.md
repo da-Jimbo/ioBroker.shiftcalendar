@@ -10,13 +10,13 @@ Der Adapter basiert auf einem frei definierbaren **Pattern-System mit Wiederholu
 
 ## ✨ Features
 
-* ✅ Frei definierbare Schichtmuster (Pattern-Wiederholung)
-* ✅ Unterstützt beliebige Schichtsysteme (2, 3, 4, 5+ Schichten)
-* ✅ **Unterschiedliche Arbeitszeiten innerhalb eines Systems möglich** (z. B. andere Schichten am Wochenende oder Sonntag)
-* ✅ Benutzerdefinierte Schichten (Name, Zeiten, Farbe)
-* ✅ Urlaubs- und Sondertage (inkl. Zeiträume)
-* ✅ Automatische Berechnung von aktuellen und zukünftigen Schichten
-* ✅ Optimiert für Automationen (Blockly, Skripte, VIS)
+* Frei definierbare Schichtmuster (Pattern-Wiederholung)
+* Unterstützt beliebige Schichtsysteme (2, 3, 4, 5+ Schichten)
+* **Unterschiedliche Arbeitszeiten innerhalb eines Systems möglich** (z. B. andere Schichten am Wochenende oder Sonntag)
+* Benutzerdefinierte Schichten (Name, Zeiten, Farbe)
+* Urlaubs- und Sondertage (inkl. Zeiträume)
+* Automatische Berechnung von aktuellen und zukünftigen Schichten
+* Optimiert für Automationen (Blockly, Skripte, VIS)
 
 ---
 
@@ -51,7 +51,7 @@ Nur sichtbar bei Auswahl von **„Benutzerdefiniert“**.
 
 Hier definierst du dein eigenes Schichtsystem:
 
-* Pattern (z. B. `FFSSNNXX`)
+* Pattern (z. B. `FFFFFXNNNNXXXSSSSSXX`)
 * Jede Position entspricht einem Tag
 * Das Pattern wird automatisch wiederholt
 
