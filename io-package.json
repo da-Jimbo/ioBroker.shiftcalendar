@@ -1,8 +1,11 @@
 {
   "common": {
-    "enabled": true,
     "name": "shiftcalendar",
-    "version": "1.0.0",
+    "version": "1.0.1",
+    "mode": "daemon",
+    "enabled": true,
+    "icon": "admin/shiftcalendar.png",
+    "extIcon": "https://raw.githubusercontent.com/da-Jimbo/ioBroker.shiftcalendar/main/admin/shiftcalendar.png",
     "news": {
       "1.0.0": {
         "en": "initial release",
